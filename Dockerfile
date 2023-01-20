@@ -14,5 +14,5 @@ COPY . .
 EXPOSE 5000
 
 # Run the application
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["scripts/docker-entrypoint.sh"]
 CMD ["start"]
