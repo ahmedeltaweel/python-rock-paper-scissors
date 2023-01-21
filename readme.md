@@ -30,6 +30,11 @@ $ docker-compose up
 ```
 The application will be running at http://localhost:5000
 
+Migrate DB using
+```sh
+docker-compose run app migrate
+```
+
 Example
 The following example shows how to start a new game with player1 as Alice and player2 as Bob
 
@@ -46,5 +51,5 @@ curl -X PATCH -H "Content-Type: application/json" -d '{"player1": "ROCK","player
 ```
 
 ```sh
-curl -X GET -H "Content-Type: application/json" http://localhost:5000/game/2/
+curl -X GET -H "Content-Type: application/json" -d '{"id": 1}' http://localhost:5000/game
 ```
