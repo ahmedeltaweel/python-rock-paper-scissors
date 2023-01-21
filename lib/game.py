@@ -1,39 +1,7 @@
-from enum import Enum
-from dataclasses import dataclass
-from schema.game import GameSchema, GameMoveSchema, GameScoreSchema
+
+from models.game import Game, GameScore, User
 from repository.game import GameRepo
-
-
-class Choices(Enum):
-    ROCK = 'ROCK'
-    PAPER = 'PAPER'
-    SCISSORS = 'SCISSORS'
-
-
-@dataclass(frozen=True)
-class User:
-    name: str
-    scrore: int
-
-
-@dataclass(frozen=True)
-class Game:
-    player1: User
-    player2: User
-
-
-@dataclass(frozen=True)
-class GameMove:
-    player1: Choices
-    player2: Choices
-    game_id: int
-
-
-@dataclass(frozen=True)
-class GameScore:
-    player1: int
-    player2: int
-    game_id: int
+from schema.game import GameMoveSchema, GameSchema, GameScoreSchema
 
 
 class GameLib:
@@ -55,7 +23,7 @@ class GameLib:
 
     def retrieve(self, id: int) -> GameSchema:
         game = self.repo.retrieve_game(id)
-        return GameSchema().dump(game)
+        return GameSchema().dumps(game)
 
     def score(self, score: GameScoreSchema) -> None:
         self.repo.update_game(GameScore(

@@ -26,7 +26,9 @@ class GameAPI(MethodView):
         self.lib = GameLib(repo=repo)
 
     def get(self):
-        game = self.lib.retrieve(self.get('id'))
+        # FIXME: use proper api convention
+        data = request.get_json()
+        game = self.lib.retrieve(data['id'])
         if not game:
             return Response(status=404)
         return Response(response=game, status=200)
@@ -75,7 +77,8 @@ class GameAPI(MethodView):
         }, 200)
 
 
-app.add_url_rule('/game', view_func=GameAPI.as_view('counter'))
+app.add_url_rule('/api/game', view_func=GameAPI.as_view('game'))
+
 
 
 if __name__ == '__main__':

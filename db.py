@@ -23,12 +23,15 @@ class PostgresSQLConnection:
         for i in range(1, attempts + 1):  # max 15 sec to create/restore DB connection
             try:
                 self._pool = SimpleConnectionPool(self._min_pool_size, self._max_pool_size, **self._conn_params)
-
-                result = self.execute("SHOW server_version")
-                print(f"Successfully connected to DB server: v{result[0][0]}")
+                conn = self._pool.getconn()
+                with conn.cursor() as curs:
+                    # Send keepalive request
+                    result = curs.execute("SHOW server_version")
+                    print(f"Successfully connected to DB server: v{result}")
+                    conn.reset()
 
                 return
-            except psycopg2.OperationalError as e:
+            except (InterfaceError, OperationalError) as e:
                 if i < attempts:
                     delay = i * backoff
                     print(f"DB error: {str(e)}")  # FIXME: convert to log

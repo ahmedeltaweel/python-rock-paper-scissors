@@ -4,16 +4,23 @@ services:
     build:
       context: .
     ports:
-      - "5000:5000"
+      - 8000:8000
     environment:
-      - DATABASE_URL=postgres://user:password@db:5432/gamedb
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: gamedb
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      FLASK_APP: /app/main.py
     depends_on:
       - db
+    volumes:
+      - ./:/app
   db:
     image: postgres:13.7
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=gamedb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gamedb
     ports:
-      - "5432:5432"
+      - 5432:5432

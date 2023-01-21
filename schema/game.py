@@ -1,5 +1,5 @@
-from marshmallow import Schema, fields, ValidationError
-from lib.game import Choices
+from marshmallow import Schema, ValidationError, fields
+from models.game import Choices
 
 
 class UserSchema(Schema):

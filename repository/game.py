@@ -1,10 +1,9 @@
-import psycopg2
-from lib.game import User, Game, GameScore
+from models.game import User, Game, GameScore
 
 
 class GameRepo:
-    def __init__(self, conn: psycopg2.connection) -> None:
-        self.conn = conn
+    def __init__(self, conn) -> None:
+        self.conn = conn.get_connection()
 
     def save_game(self, game: Game) -> int:
         _cursor = self.conn.cursor()
@@ -17,12 +16,12 @@ class GameRepo:
 
     def retrieve_game(self, id: int) -> Game:
         _cursor = self.conn.cursor()
-        _cursor.execute("SELECT * FROM game where id = %s", id)
+        _cursor.execute("SELECT * FROM game where id = %s", [id])
         game = _cursor.fetchone()
         _cursor.close()
         return Game(
-            player1=User(name=game['player1'], scrore=game['p1_score']),
-            player2=User(name=game['player2'], scrore=game['p2_score'])
+            player1=User(name=game[1], scrore=game[3]),
+            player2=User(name=game[2], scrore=game[4])
         )
 
     def update_game(self, move: GameScore) -> None:

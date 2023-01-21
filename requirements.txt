@@ -1,0 +1,4 @@
+flask
+marshmallow
+psycopg2-binary
+ipdb

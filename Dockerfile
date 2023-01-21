@@ -1,18 +1,17 @@
-# Use the official Python image
 FROM python:3.9-alpine
 
-# Copy the requirements file
 COPY requirements.txt .
 
-# Install the dependencies
 RUN pip install -r requirements.txt
 
-# Copy the rest of the application files
-COPY . .
+COPY . /app
 
-# Expose the port for the application
-EXPOSE 5000
+RUN apk add --no-cache curl
+RUN curl -fsSL -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/latest/download/dbmate-linux-amd64 && chmod +x /usr/local/bin/dbmate 
 
-# Run the application
-ENTRYPOINT ["scripts/docker-entrypoint.sh"]
+WORKDIR /app
+
+EXPOSE 8000
+
+ENTRYPOINT [ "sh", "./scripts/entrypoint.sh"]
 CMD ["start"]
